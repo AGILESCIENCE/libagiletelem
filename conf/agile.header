@@ -1,0 +1,31 @@
+-- name of header
+agile
+-- number of field with dimension of packet (or first field if dim of packet is stored in a 32 bit field)
+1
+-- 16 or 32 bit size dimension of the packet lenght
+16
+[Field]
+-- field 0
+id
+3
+0b01
+-- field 1
+packet length
+5
+none
+--field 2 
+dummy
+4
+none
+--field 3  
+EVSTATUS
+2
+none
+--field 4
+PHASE
+2
+none
+
+
+
+

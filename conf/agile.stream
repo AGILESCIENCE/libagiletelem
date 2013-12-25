@@ -1,0 +1,11 @@
+[Configuration]
+--prefix
+false
+--stream format bigendian
+true
+--dimension of prefix
+0
+[Header Format]
+agile.header
+[Packet Format]
+event.packet

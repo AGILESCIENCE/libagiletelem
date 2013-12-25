@@ -1,0 +1,71 @@
+-- name of packet
+AGILE grid event
+[PacketHeader]
+-- file that contains the description of the header
+agile.header
+[DataFieldHeader]
+-- field 0 - time
+time 1
+16
+none
+-- field 1 - time
+time 2
+16
+none
+-- field 2 - time
+time 3
+16
+none
+-- field 3 - time
+time 4
+16
+none
+-- field 4 
+ENERGY
+16
+none
+--field 5  
+PH_EARTH
+8
+none
+--field 6  
+THETA
+8
+none
+[SourceDataField]
+-- type of packet: noblock, block, rblock (with recoursive block)
+rblock
+[RBlock Configuration]
+-- fixed part present (yes | no)
+yes
+-- variable part present (yes | no). If yes, add [RBlockX] sections.
+no
+--number of rblock (if variable part is present)
+0
+[Fixed Part]
+-- field 0 - RA 1 -  SOURCE DATA HEADER ----------------------------------------
+RA1
+16
+none
+-- field 1 - RA 2
+RA2
+16
+none
+-- field 2 - DEC 1
+DEC1
+16
+none
+-- field 3 - DEC 2
+DEC2
+16
+none
+[Identifiers]
+-- ID0 type
+-- field number
+0
+-- type (0 header, 1 data field)
+0
+-- value
+1
+
+
