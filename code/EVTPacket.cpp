@@ -16,11 +16,11 @@
 
 
 #include "EVTPacket.h"
-#include "OutputFile.h"
-#include "InputFile.h"
-#include "PacketDataField.h"
-#include "SDFRBlock.h"
-#include "OutputPacketStream.h"
+#include "packet/OutputFile.h"
+#include "packet/InputFile.h"
+#include "packet/PacketDataField.h"
+#include "packet/SDFRBlock.h"
+#include "packet/OutputPacketStream.h"
 
 
 

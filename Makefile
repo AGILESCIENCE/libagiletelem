@@ -23,7 +23,7 @@ SHELL = /bin/sh
 
 SYSTEM= $(shell gcc -dumpmachine)
 #ice, ctarta, mpi, cfitsio, sqllite
-LINKERENV= cfitsio
+LINKERENV= cfitsio, agile
 PROJECT= libagiletelem
 EXE_NAME = 
 LIB_NAME = libagiletelem
@@ -88,6 +88,10 @@ endif
 ifneq (, $(findstring ctarta, $(LINKERENV)))
         INCPATH += -I$(CTARTA)/include
 	LIBS += -L$(CTARTA)/lib -lpacket 
+endif
+ifneq (, $(findstring agile, $(LINKERENV)))
+        INCPATH += -I$(AGILE)/include
+	LIBS += -L$(AGILE)/lib -lpacket
 endif
 #Insert the optional parameter to the compiler. The CFLAGS could be changed externally by the user
 CFLAGS   = -g 
@@ -190,13 +194,6 @@ exe:  makeobjdir  $(OBJECTS)
 		test -d $(EXE_DESTDIR) || mkdir -p $(EXE_DESTDIR)
 		$(CC) $(CPPFLAGS) $(ALL_CFLAGS) -o $(EXE_DESTDIR)/$(EXE_NAME) $(OBJECTS_DIR)/*.o $(LIBS)
 
-simple:  makeobjdir makeslicesimple $(OBJECTS) 
-		test -d $(EXE_DESTDIR) || mkdir -p $(EXE_DESTDIR)
-		$(CC) $(CPPFLAGS) $(ALL_CFLAGS) -o $(EXE_DESTDIR)/$(EXE_NAME) $(OBJECTS_DIR)/*.o $(LIBS)
-		
-composite:  makeobjdir makeslicecomposite $(OBJECTS) 
-		test -d $(EXE_DESTDIR) || mkdir -p $(EXE_DESTDIR)
-		$(CC) $(CPPFLAGS) $(ALL_CFLAGS) -o $(EXE_DESTDIR)/$(EXE_NAME) $(OBJECTS_DIR)/*.o $(LIBS)
 	
 staticlib: makelibdir makeobjdir $(OBJECTS)
 		test -d $(LIB_DESTDIR) || mkdir -p $(LIB_DESTDIR)	
@@ -221,19 +218,6 @@ makeobjdir:
 makelibdir:
 	test -d $(LIB_DESTDIR) || mkdir -p $(LIB_DESTDIR)
 
-makeslice: makeslicesimple
-
-makeslicesimple:
-	slice2cpp --output-dir code code/Astro.ice
-	slice2freeze --dict AgileEvtMap,double,Astro::agileEvt --dict AgileLogMap,Astro::agileLogKey,Astro::agileLog --output-dir code AstroMap code/Astro.ice
-	$(CC) $(CPPFLAGS) $(ALL_CFLAGS) -c $(SOURCE_DIR)/Astro.cpp -o $(OBJECTS_DIR)/Astro.o
-	$(CC) $(CPPFLAGS) $(ALL_CFLAGS) -c $(SOURCE_DIR)/AstroMap.cpp -o $(OBJECTS_DIR)/AstroMap.o
-	
-makeslicecomposite:
-	slice2cpp --output-dir code code/Astro.ice
-	slice2freeze --dict AgileEvtMap,Astro::agileEvtKey,Astro::agileEvt --dict AgileLogMap,Astro::agileLogKey,Astro::agileLog --output-dir code AstroMap code/Astro.ice
-	$(CC) $(CPPFLAGS) $(ALL_CFLAGS) -c $(SOURCE_DIR)/Astro.cpp -o $(OBJECTS_DIR)/Astro.o
-	$(CC) $(CPPFLAGS) $(ALL_CFLAGS) -c $(SOURCE_DIR)/AstroMap.cpp -o $(OBJECTS_DIR)/AstroMap.o
 
 #clean: delete all files from the current directory that are normally created by building the program. 
 clean:
@@ -267,10 +251,10 @@ install: all
 	test -d $(libdir) || mkdir -p $(libdir)
 	test -d $(includedir) || mkdir -p $(includedir)	
 	$(COPY_FILE) $(LIB_DESTDIR)/$(TARGETA) $(libdir)
-	$(COPY_FILE) $(LIB_DESTDIR)/$(TARGET0) $(libdir)
-	$(COPY_FILE) $(LIB_DESTDIR)/$(TARGET1) $(libdir)
-	$(COPY_FILE) $(LIB_DESTDIR)/$(TARGET2) $(libdir)
-	$(COPY_FILE) $(LIB_DESTDIR)/$(TARGETD) $(libdir)
+	#$(COPY_FILE) $(LIB_DESTDIR)/$(TARGET0) $(libdir)
+	#$(COPY_FILE) $(LIB_DESTDIR)/$(TARGET1) $(libdir)
+	#$(COPY_FILE) $(LIB_DESTDIR)/$(TARGET2) $(libdir)
+	#$(COPY_FILE) $(LIB_DESTDIR)/$(TARGETD) $(libdir)
 	$(COPY_FILE) $(INCLUDE) $(includedir)
 	
 	# For exe installation

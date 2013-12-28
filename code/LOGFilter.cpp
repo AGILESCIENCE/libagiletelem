@@ -16,7 +16,7 @@
 
 
 #include "LOGFilter.h"
-#include "File.h"
+#include "packet/File.h"
 
 LOGFilter::LOGFilter(string filename, uint32_t timeStep) {
 	this->timeStep = timeStep;

@@ -18,12 +18,12 @@
 #define _AGILEPACKET_H
 #include <iostream>
 #include <stdlib.h>
-#include "OutputPacketStream.h"
-#include "InputPacketStream.h"
-#include "ByteStream.h"
-#include "Output.h"
-#include "Input.h"
-#include "Packet.h"
+#include "packet/OutputPacketStream.h"
+#include "packet/InputPacketStream.h"
+#include "packet/ByteStream.h"
+#include "packet/Output.h"
+#include "packet/Input.h"
+#include "packet/Packet.h"
 
 
 using namespace std;

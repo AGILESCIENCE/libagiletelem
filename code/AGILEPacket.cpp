@@ -1,7 +1,7 @@
 #include "AGILEPacket.h"
-#include "OutputFile.h"
-#include <InputFile.h>
-#include "PacketException.h"
+#include "packet/OutputFile.h"
+#include "packet/InputFile.h"
+#include "packet/PacketException.h"
 
 void AGILETelem::AGILEPacket::printListOfString(char** r) {
 	int i = 0;
