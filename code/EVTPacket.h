@@ -1,5 +1,5 @@
 /***************************************************************************
-                          CTATriggeredTelescope.h  -  description
+                          EVTPacket.h  -  description
                              -------------------
     copyright            : (C) 2013 Andrea Bulgarelli
     email                : bulgarelli@iasfbo.inaf.it
@@ -21,43 +21,7 @@
 namespace AGILETelem {
 
 /// Creating and writing a packet for each AGILE grid event,
-/// The query on data for AG_ctsmapgen is he following
-/*if (intvs.Count()==1)
-        str << "TIME >= " << fixed << intvs[0].Start() << " && TIME <= " << intvs[0].Stop();
-    else {
-        str << "( ";
-        const char* sep = "";
-        for (int i=0; i<intvs.Count(); ++i) {
-            str << sep << " ( TIME >= " << fixed << intvs[i].Start() << " && TIME <= " << intvs[i].Stop() << " )";
-            sep = " ||";
-        }
-        str << " )";
-    }
 
-    str << " && ENERGY >= " << emin;
-    str << " && ENERGY <= " << emax;
-    str << " && PH_EARTH >= " << albrad;
-    str << " && THETA < " << fovradmax;
-    str << " && THETA >= " << fovradmin;
-
-    if ((phasecode & 1) == 1)
-        str << " && PHASE .NE. 0";
-    if ((phasecode & 2) == 2)
-        str << " && PHASE .NE. 1";
-    if ((phasecode & 4) == 4)
-        str << " && PHASE .NE. 2";
-    if ((phasecode & 8) == 8)
-        str << " && PHASE .NE. 3";
-    if ((phasecode & 16) == 16)
-        str << " && PHASE .NE. 4";
-
-    if ((filtercode & 1) == 1)
-        str << " && EVSTATUS .NE. 'L'";
-    if ((filtercode & 2) == 2)
-        str << " && EVSTATUS .NE. 'G'";
-    if ((filtercode & 4) == 4)
-        str << " && EVSTATUS .NE. 'S'";
-*/        
 class EVTPacket : public AGILETelem::AGILEPacket {
 
 
@@ -71,6 +35,9 @@ public:
 	EVTPacket(string packetConfig);
 
     ~EVTPacket();
+    
+    /// Writing the packet
+	void writePacket();
 
 	void setTime(double time);
 	

@@ -6,22 +6,22 @@ agile
 16
 [Field]
 -- field 0
-id
-3
-0b01
+00
+2
+0b00
 -- field 1
 packet length
-5
+6
 none
---field 2 
-dummy
+-- field 2 
+ID
 4
 none
---field 3  
+-- field 3  
 EVSTATUS
 2
 none
---field 4
+-- field 4
 PHASE
 2
 none

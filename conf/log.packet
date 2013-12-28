@@ -1,0 +1,115 @@
+-- name of packet
+AGILE log event
+[PacketHeader]
+-- file that contains the description of the header
+agile.header
+[DataFieldHeader]
+-- field 0 - time
+time 1
+16
+none
+-- field 1 - time
+time 2
+16
+none
+-- field 2 - time
+time 3
+16
+none
+-- field 3 - time
+time 4
+16
+none
+-- field 4 
+LIVETIME1
+16
+none
+--field 5  
+LIVETIME2
+16
+none
+[SourceDataField]
+-- type of packet: noblock, block, rblock (with recoursive block)
+rblock
+[RBlock Configuration]
+-- fixed part present (yes | no)
+yes
+-- variable part present (yes | no). If yes, add [RBlockX] sections.
+no
+--number of rblock (if variable part is present)
+0
+[Fixed Part]
+-- field 0 - ATTITUDE_RA_Y 1 -  SOURCE DATA HEADER ----------------------------------------
+ATTITUDE_RA_Y 1
+16
+none
+-- field 1 - ATTITUDE_RA_Y 2
+ATTITUDE_RA_Y 2
+16
+none
+-- field 2 - ATTITUDE_RA_Y 3
+ATTITUDE_RA_Y 3
+16
+none
+-- field 3 - ATTITUDE_RA_Y 4
+ATTITUDE_RA_Y 4
+16
+none
+-- field 4 - ATTITUDE_DEC_Y 1 
+ATTITUDE_DEC_Y 1
+16
+none
+-- field 5 - ATTITUDE_DEC_Y 2
+ATTITUDE_DEC_Y 2
+16
+none
+-- field 6 - ATTITUDE_DEC_Y 3
+ATTITUDE_DEC_Y 3
+16
+none
+-- field 7 - ATTITUDE_DEC_Y 4
+ATTITUDE_DEC_Y 4
+16
+none
+-- field 8 - EARTH_RA 1 
+EARTH_RA 1
+16
+none
+-- field 9 - EARTH_RA 2
+EARTH_RA 2
+16
+none
+-- field 10 - EARTH_RA 3
+EARTH_RA 3
+16
+none
+-- field 11 - EARTH_RA 4
+EARTH_RA 4
+16
+none
+-- field 12 - EARTH_DEC 1 
+EARTH_DEC 1
+16
+none
+-- field 13 - EARTH_DEC 2
+EARTH_DEC 2
+16
+none
+-- field 14 - EARTH_DEC 3
+EARTH_DEC 3
+16
+none
+-- field 15 - EARTH_DEC 4
+EARTH_DEC 4
+16
+none
+[Identifiers]
+-- ID0 type
+-- field number
+2
+-- type (0 header, 1 data field)
+0
+-- value
+2
+
+

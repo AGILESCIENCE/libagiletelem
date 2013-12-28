@@ -24,9 +24,10 @@ AGILETelem::AGILEPacket::AGILEPacket(string packetConfig, string tmInputFileName
 	outputPacket = 0;
 	inputPacket = 0;
 	this->packetStreamConfig = packetConfig;
+	this->packetID = packetID;
 
 	try {
-		char** param = (char**) new char*[2];
+		char** param = (char**) new char*[3];
 
 		if (tmOutputFileName != "") {
 			/// create output packet stream
@@ -44,7 +45,8 @@ AGILETelem::AGILEPacket::AGILEPacket(string packetConfig, string tmInputFileName
 			out = (Output*) new OutputFile(ops->isBigEndian());
 			/// file name
 			param[0] = (char*) tmOutputFileName.c_str();
-			param[1] = 0;
+			param[1] = "a";
+			param[2] = 0;
 
 			/// open output
 			out->open(param);
@@ -94,7 +96,8 @@ AGILETelem::AGILEPacket::AGILEPacket(string packetConfig, int packetID) {
 	inputPacket = 0;
 
 	this->packetStreamConfig = packetConfig;
-
+	this->packetID = packetID;
+	
 	try {
 		char** param = (char**) new char*[2];
 
@@ -149,11 +152,18 @@ void AGILETelem::AGILEPacket::writePacket() {
 	ops->writePacket(outputPacket);
 }
 
-byte* AGILETelem::AGILEPacket::readPacket() {
+byte* AGILETelem::AGILEPacket::readPacket(dword pos) {
+	//set the position
+	if(pos != -1) {
+		InputFile* ipf = (InputFile*) in;
+		ipf->setpos(pos);
+	}
+	//read the packet
 	inputPacket = ips->readPacket();
 	if (inputPacket == 0)
 		return 0;
-	//cout << "BS: " << inputPacket->getDimension() << endl;
+	if (inputPacket->getPacketID() != packetID)
+		return 0;
 	return inputPacket->getInputStream()->stream;
 }
 

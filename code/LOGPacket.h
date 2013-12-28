@@ -1,5 +1,5 @@
 /***************************************************************************
-                          CTATriggeredTelescope.h  -  description
+                          LOGPacket.h  -  description
                              -------------------
     copyright            : (C) 2013 Andrea Bulgarelli
     email                : bulgarelli@iasfbo.inaf.it
@@ -20,9 +20,7 @@
 
 namespace AGILETelem {
 
-/// Creating and writing a packet for each CTA triggered telescope,
-/// containg the FADC value at each sample of the telescope pixel
-/// \brief CTA triggered telescope packet class
+/// LOG fits files store one line each 0.1 s
 class LOGPacket : public AGILETelem::AGILEPacket  {
 
 
@@ -37,9 +35,39 @@ public:
 
     ~LOGPacket();
 
+	/// Writing the packet
+	void writePacket();
+	
+	/// Printing the created packet
+	void printPacket_output();
 
+	void setTime(double time);
+	
+	double getTime();
+	
+	void setPhase(byte phase);
 
+	byte getPhase();	
 
+	void setLivetime(float livetime);
+	
+	float getLivetime();
+	
+	void setAttitudeRaY(double value) { sdf_out->setFieldValue_5_2(0, value); };
+	
+	double getAttitudeRaY() { return sdf_in->getFieldValue_5_2(0); };
+
+	void setAttitudeDecY(double value)  { sdf_out->setFieldValue_5_2(4, value); };
+	
+	double getAttitudeDecY() { return sdf_in->getFieldValue_5_2(4); };
+	
+	void setEarthRa(double value)  { sdf_out->setFieldValue_5_2(8, value); };
+	
+	double getEarthRa() { return sdf_in->getFieldValue_5_2(8); };
+
+	void setEarthDec(double value)  { sdf_out->setFieldValue_5_2(12, value); };
+	
+	double getEarthDec() { return sdf_in->getFieldValue_5_2(12); };
 };
 }
 

@@ -42,6 +42,7 @@ protected:
 	InputPacketStream* ips;
 	Packet* inputPacket;
 	Packet* outputPacket;
+	int packetID;
 	
  
 	///Header of input packet	
@@ -84,8 +85,9 @@ public:
 	void printPacket_output();
 
 	/// Read a packet from input
+	/// \param pos set the position into the file (if any) before read the packet. -1 = do not set any position (use the last position)
 	/// \return a ByteStreamPtr or 0 if there is no packets
-	byte* readPacket();
+	byte* readPacket(dword pos=-1);
 
 	/// Read a packet from input
 	void readPacketPy();

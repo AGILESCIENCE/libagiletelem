@@ -23,10 +23,10 @@ SHELL = /bin/sh
 
 SYSTEM= $(shell gcc -dumpmachine)
 #ice, ctarta, mpi, cfitsio, sqllite
-LINKERENV= ctarta, cfitsio
-PROJECT= gtImporterELpacket
-EXE_NAME = gtImporterELpacket
-LIB_NAME = gtImporterELpacket
+LINKERENV= cfitsio
+PROJECT= libagiletelem
+EXE_NAME = 
+LIB_NAME = libagiletelem
 VER_FILE_NAME = version.h
 #the name of the directory where the conf file are copied (into $(datadir))
 CONF_DEST_DIR =
@@ -180,7 +180,7 @@ $(DOXY_SOURCE_DIR)/%.cpp : %.cpp
 ####### 10) Build rules
 
 #all: compile the entire program.
-all: exe
+all: lib
 		#only if conf directory is present:
 		#$(SYMLINK) $(CONF_DIR) $(CONF_DEST_DIR)
 
@@ -241,7 +241,7 @@ clean:
 	$(DEL_FILE) *~ core *.core
 	$(DEL_FILE) $(LIB_DESTDIR)/*.a
 	$(DEL_FILE) $(LIB_DESTDIR)/*.so*
-	$(DEL_FILE) $(EXE_DESTDIR)/$(EXE_NAME)	
+	#$(DEL_FILE) $(EXE_DESTDIR)/$(EXE_NAME)	
 	$(DEL_FILE) version
 	$(DEL_FILE) prefix
 	$(DEL_FILE) $(PROJECT).dvi
@@ -252,7 +252,6 @@ clean:
 	test $(LIB_DESTDIR) = . || $(DEL_DIR) $(LIB_DESTDIR)
 	test $(DOXY_SOURCE_DIR) = . || $(DEL_DIR) $(DOXY_SOURCE_DIR)
 	test $(DOC_DIR) = . || $(DEL_DIR) $(DOC_DIR)
-	rm $(INCLUDE_DIR)/Astro*.h $(SOURCE_DIR)/Astro*.cpp	
 	
 #Delete all files from the current directory that are created by configuring or building the program. 
 distclean: clean

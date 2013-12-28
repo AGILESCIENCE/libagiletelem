@@ -37,6 +37,15 @@ AGILETelem::EVTPacket::~EVTPacket() {
 
 }
 
+/// Writing the packet
+void AGILETelem::EVTPacket::writePacket() {
+	//initialize some filds
+	//ID
+	hea_out->setFieldValue(2, 1);
+	
+	AGILEPacket::writePacket();
+}
+
 void AGILETelem::EVTPacket::setTime(double time) {
 	outputPacket->dataField->dataFieldHeader->setFieldValue_5_2(0, time);	
 }

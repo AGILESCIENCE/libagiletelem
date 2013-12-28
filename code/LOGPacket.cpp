@@ -37,3 +37,42 @@ AGILETelem::LOGPacket::~LOGPacket() {
 
 }
 
+/// Writing the packet
+void AGILETelem::LOGPacket::writePacket() {
+	//initialize some filds
+	//ID
+	hea_out->setFieldValue(2, 2);
+	
+	AGILEPacket::writePacket();
+}
+
+/// Printing the created packet
+void AGILETelem::LOGPacket::printPacket_output() {
+	AGILEPacket::printPacket_output();
+	cout << "ATTITUDE_RA_Y  " << sdf_out->getFieldValue_5_2(0) << endl;
+	cout << "ATTITUDE_DEC_Y " << sdf_out->getFieldValue_5_2(4) << endl;
+}
+
+void AGILETelem::LOGPacket::setTime(double time) {
+	dfh_out->setFieldValue_5_2(0, time);	
+}
+	
+double AGILETelem::LOGPacket::getTime() {
+	return dfh_in->getFieldValue_5_2(0);
+}
+
+void AGILETelem::LOGPacket::setLivetime(float livetime) {
+    dfh_out->setFieldValue_5_1(4, livetime);
+}
+
+float AGILETelem::LOGPacket::getLivetime() {
+    return dfh_in->getFieldValue_5_1(4);
+}
+
+void AGILETelem::LOGPacket::setPhase(byte phase) {
+	hea_out->setFieldValue(4, (word)phase);
+}
+
+byte AGILETelem::LOGPacket::getPhase() {
+	return (byte) hea_in->getFieldValue(4);
+}
