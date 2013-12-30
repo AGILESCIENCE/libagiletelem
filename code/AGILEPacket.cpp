@@ -17,6 +17,8 @@ void AGILETelem::AGILEPacket::printListOfString(string* r) {
 AGILETelem::AGILEPacket::AGILEPacket(string packetConfig, string tmInputFileName,
 		string tmOutputFileName, int packetID) {
 
+	cout << "packetConfig " << packetConfig << endl;
+
 	in = 0;
 	out = 0;
 	ips = 0;

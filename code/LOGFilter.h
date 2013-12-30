@@ -17,8 +17,8 @@
 #ifndef _LOGFILTER_H
 #define _LOGFILTER_H
 #include "LOGPacket.h"
-#include <vector>
-#include <iomanip>
+#include "AGILEFilter.h"
+
 using namespace PacketLib;
 using namespace AGILETelem;
 
@@ -51,14 +51,14 @@ using namespace AGILETelem;
 }
 */
 
-class LOGFilter  {
+class LOGFilter : public AGILEFilter {
 
 
 public:
     
     ///\param filename the filename of the archive
     ///\param timeStep the sample of lines withint the original FITS archive. Now is pre-filtered
-	LOGFilter(string filename, uint32_t timeStep);
+	LOGFilter(string archivename, uint32_t timeStep);
 
     ~LOGFilter();
     
@@ -67,8 +67,8 @@ public:
     ///but pre-filtered are
     ///LIVETIME > 0 && LOG_STATUS == 0 && MODE == 2 && ((#ROW == 1) || (#ROW == (#ROW/timeStep) *timeStep))
     ///\param tstart,tstop should be a list of time intervals
-    ///\return the number of rows
-    uint32_t query(double tstart, double tstop, short phasecode);
+    ///\return false if the index of the lower or upper bound is not found, found if the interval is found
+    bool query(double tstart, double tstop, short phasecode);
     
     ///reset all the vectors of the result
     void reset();
@@ -87,12 +87,6 @@ public:
     
     bool binary_search(double time, uint32_t& index, bool lowerbound, uint32_t iminstart = 0, uint32_t imaxstart = 0);
     void readTimeInterval(uint32_t index_end, double &timestart, double &timend);
-
-    
-protected:
-
-	
-	uint32_t midpoint(uint32_t imin, uint32_t imax);
 	
     
 protected:

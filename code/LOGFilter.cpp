@@ -18,12 +18,22 @@
 #include "LOGFilter.h"
 #include "packet/File.h"
 
-LOGFilter::LOGFilter(string filename, uint32_t timeStep) {
+LOGFilter::LOGFilter(string archivename, uint32_t timeStep) : AGILEFilter(archivename) {
 	this->timeStep = timeStep;
+	
+	string agile;
+    const char* home = getenv("AGILE");
+    if (!home)
+    {
+    	std::cerr << "AGILE environment variable is not defined." << std::endl;
+        exit(0);
+    }
+    agile = home;
+        	
 	/// The Packet containing the FADC value of each triggered telescope
-	log = new AGILETelem::LOGPacket("./conf/agile.stream", filename, "");
+	log = new AGILETelem::LOGPacket(agile + "/share/agiletelem/agile.stream", archivename, "");
 	PacketLib::File f(log->isBigendian());
-	f.open(filename.c_str(), "r");
+	f.open(archivename.c_str(), "r");
 	filedim = f.fsize();
 	//get first Packet
 	byte* b_log = log->readPacket(0L);
@@ -36,6 +46,7 @@ LOGFilter::LOGFilter(string filename, uint32_t timeStep) {
 	cout << "packetdim " << packetdim << endl;
 	cout << "numberofpackets " << numberofpackets << endl;
 	cout << "time = " << setprecision(15) << tstart << ", " << tend << endl;
+	f.close();
 	reset();
 }
 
@@ -53,18 +64,17 @@ void LOGFilter::readTimeInterval(uint32_t index_end, double &timestart, double &
 	return;
 }
 
-uint32_t LOGFilter::midpoint(uint32_t imin, uint32_t imax) {
-	return imin + ((imax - imin) / 2);
-}
 
 bool LOGFilter::binary_search(double time, uint32_t &index, bool lowerbound, uint32_t iminstart, uint32_t imaxstart) {
 uint32_t imin = 1;
-if(iminstart != 0)
-	imin = iminstart;
-uint32_t imax = numberofpackets-1;
-if(imaxstart != 0)
-	imax = imaxstart;
-int count = 0;
+	if(iminstart != 0)
+		imin = iminstart;
+	uint32_t imax = numberofpackets-1;
+	if(imaxstart != 0)
+		imax = imaxstart;
+	int count = 0;
+	if(time < 0)
+		return false;
 	while(imax >= imin) {
 		count++;
 		// calculate the midpoint for roughly equal partition
@@ -73,7 +83,7 @@ int count = 0;
       	double timeend;
       	readTimeInterval(imid, timestart, timeend);
       	if(timestart < time && timeend >= time) {
-      		cout << count << endl;
+      		//cout << count << endl;
       		// key found at index imid
       		if(lowerbound)
       			index = imid;
@@ -84,8 +94,8 @@ int count = 0;
       				index = imid-1;
       		}
       		log->readPacket(packetdim * index);
-      		cout << "I: [" << timestart << ", " << timeend << "]" << endl;
-      		cout << "A: " << setprecision(15) << log->getTime() << endl;
+      		//string bound = lowerbound?"lowerbound":"upperbound";
+      		//cout << "I"<< bound <<": [" << setprecision(15) <<  timestart << ", " << timeend << "] -> " << log->getTime() << " -> " << index << endl;
         	return true;
         }
         else if (time > timeend)
@@ -95,25 +105,25 @@ int count = 0;
         	// change max index to search lower subarray
         	imax = imid - 1;
 	}
-	cout << count << endl;
+	//cout << count << endl;
 	return false;
 	
 }
 
-uint32_t LOGFilter::query(double tstart, double tstop, short phasecode) {
+bool LOGFilter::query(double tstart, double tstop, short phasecode) {
 	//binary search index1
 	uint32_t index1;
 	bool ret = binary_search(tstart, index1, true);
 	if(ret == false) {
 		cerr << "LOGFilter::query index1 not found" << endl;
-		return -1;
+		return false;
 	}
 	//binary search index2
 	uint32_t index2;
-	ret = binary_search(tstop, index2, false, index1);
+	ret = binary_search(tstop, index2, false);
 	if(ret == false) {
 		cerr << "LOGFilter::query index2 not found" << endl;
-		return -1;
+		return false;
 	}
 	for(uint32_t i=index1; i<=index2; i++) {
 		byte* b_log = log->readPacket(packetdim * i);
@@ -168,11 +178,11 @@ uint32_t LOGFilter::query(double tstart, double tstop, short phasecode) {
 			earth_dec.push_back(log->getEarthDec());
 			time.push_back(log->getTime());
 			livetime.push_back(log->getLivetime());
-			
+			this->phase.push_back((short)log->getPhase());
 		}
 		
 	}
-	return time.size();
+	return true;
 }
     
 void LOGFilter::reset() {
@@ -187,7 +197,8 @@ void LOGFilter::reset() {
 	earth_dec.clear();
 	time.reserve(capacity);
 	time.clear();
-	//phase.clear();
+	phase.reserve(capacity);
+	phase.clear();
 	livetime.reserve(capacity);
 	livetime.clear();
 }

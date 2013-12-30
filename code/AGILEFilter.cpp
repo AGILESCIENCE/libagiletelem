@@ -1,5 +1,5 @@
 /***************************************************************************
-                          EVTFilter.cpp  -  description
+                          AGILEFilter.cpp  -  description
                              -------------------
     copyright            : (C) 2013 Andrea Bulgarelli
     email                : bulgarelli@iasfbo.inaf.it
@@ -13,14 +13,17 @@
  *   For commercial purpose see appropriate license terms                  *
  *                                                                         *
  ***************************************************************************/
+ 
+#include "AGILEFilter.h""
 
+AGILEFilter::AGILEFilter(string archivename) {
+	this->archivename = archivename;
+}
 
-#include "EVTFilter.h"
-
-EVTFilter::EVTFilter(string archivename) : AGILEFilter(archivename) {
+AGILEFilter::~AGILEFilter() {
 
 }
 
-EVTFilter::~EVTFilter() {
-
+uint32_t AGILEFilter::midpoint(uint32_t imin, uint32_t imax) {
+	return imin + ((imax - imin) / 2);
 }

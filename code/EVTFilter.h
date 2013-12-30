@@ -16,7 +16,7 @@
 
 #ifndef _EVTFILTER_H
 #define _EVTFILTER_H
-
+#include "AGILEFilter.h"
 #include "EVTPacket.h"
 
 using namespace PacketLib;
@@ -60,14 +60,33 @@ using namespace AGILETelem;
     if ((filtercode & 4) == 4)
         str << " && EVSTATUS .NE. 'S'";
 */        
-class EVTFilter  {
+class EVTFilter : public AGILEFilter {
 
 
 public:
     
-	EVTFilter();
+	EVTFilter(string archivename);
 
     ~EVTFilter();
+    
+    ///\param tstart,tstop should be a list of time intervals
+    ///\return false if the index of the lower or upper bound is not found, found if the interval is found
+    bool query(double tstart, double tstop);
+    
+
+    
+    ///reset all the vectors of the result
+    void reset();
+    
+    //results
+    vector<float> ra;
+    vector<float> dec;
+    
+protected:
+
+	bool binary_search(double time, uint32_t& index, bool lowerbound, uint32_t iminstart = 0, uint32_t imaxstart = 0);
+    void readTimeInterval(uint32_t index_end, double &timestart, double &timend);
+    
     
 };
 

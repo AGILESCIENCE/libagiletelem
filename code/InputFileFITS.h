@@ -20,6 +20,7 @@
 #include <fitsio.h>
 #include "FInputFile.h"
 
+
 namespace qlbase {
 
 /// FITS file reader (cfitsio wrapping class).

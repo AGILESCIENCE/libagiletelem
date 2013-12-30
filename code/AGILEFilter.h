@@ -1,5 +1,5 @@
 /***************************************************************************
-                          EVTFilter.cpp  -  description
+                          AGILEFilter.h  -  description
                              -------------------
     copyright            : (C) 2013 Andrea Bulgarelli
     email                : bulgarelli@iasfbo.inaf.it
@@ -14,13 +14,32 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef _AGILEFILTER_H
+#define _AGILEFILTER_H
 
-#include "EVTFilter.h"
+#include <vector>
+#include <iomanip>
+#include "AGILEPacket.h"
 
-EVTFilter::EVTFilter(string archivename) : AGILEFilter(archivename) {
+using namespace PacketLib;
+using namespace AGILETelem;
 
-}
+class AGILEFilter  {
 
-EVTFilter::~EVTFilter() {
 
-}
+public:
+    
+	AGILEFilter(string archivename);
+
+    ~AGILEFilter();
+  
+protected:
+
+	
+	uint32_t midpoint(uint32_t imin, uint32_t imax);
+
+	string archivename;
+	  
+};
+
+#endif

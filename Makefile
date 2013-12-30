@@ -29,7 +29,7 @@ EXE_NAME =
 LIB_NAME = libagiletelem
 VER_FILE_NAME = version.h
 #the name of the directory where the conf file are copied (into $(datadir))
-CONF_DEST_DIR =
+CONF_DEST_DIR = agiletelem
 #the name of the icon for the installation
 ICON_NAME=
 
@@ -265,7 +265,8 @@ install: all
 	#$(COPY_FILE) $(ICON_DIR)/$(ICON_NAME) $(icondir)
 
 	# For conf files installation
-	#$(COPY_FILE) $(CONF_DIR)/* $(datadir)/$(CONF_DEST_DIR)
+	test -d $(datadir)/$(CONF_DEST_DIR) || mkdir -p $(datadir)/$(CONF_DEST_DIR)
+	$(COPY_FILE) $(CONF_DIR)/* $(datadir)/$(CONF_DEST_DIR)
 
 
 #uninstall: delete all the installed files--the copies that the `install' target creates. 
