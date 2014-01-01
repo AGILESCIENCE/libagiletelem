@@ -1,7 +1,7 @@
-2013-09-30 Andrea Bulgarelli <bulgarelli@iasfbo.inaf.it>
-TAG v1.0.0
+2013-12-31 Andrea Bulgarelli <bulgarelli@iasfbo.inaf.it>
++ AGILEFilter generalization
++ EVTFilter
 
-* change 1
-* change 2
-   ** subchange 2.1
-   ** subchange 2.2
+2013-12-29 Andrea Bulgarelli <bulgarelli@iasfbo.inaf.it>
+TAG v1.0.0
++ LOGFilter

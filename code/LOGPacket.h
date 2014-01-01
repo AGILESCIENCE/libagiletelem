@@ -41,9 +41,9 @@ public:
 	/// Printing the created packet
 	void printPacket_output();
 
-	void setTime(double time);
+	virtual void setTime(double time);
 	
-	double getTime();
+	virtual double getTime();
 	
 	void setPhase(byte phase);
 

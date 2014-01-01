@@ -18,6 +18,8 @@
 #define _EVTFILTER_H
 #include "AGILEFilter.h"
 #include "EVTPacket.h"
+#include <locale>
+#include <iomanip>
 
 using namespace PacketLib;
 using namespace AGILETelem;
@@ -71,21 +73,25 @@ public:
     
     ///\param tstart,tstop should be a list of time intervals
     ///\return false if the index of the lower or upper bound is not found, found if the interval is found
-    bool query(double tstart, double tstop);
-    
-
+    bool query(double tstart, double tstop, uint8_t phasecode, uint8_t filtercode, uint16_t emin, uint16_t emax, uint8_t albrad, uint8_t fovradmin, uint8_t fovradmax);
     
     ///reset all the vectors of the result
-    void reset();
+    virtual void reset();
     
     //results
     vector<float> ra;
     vector<float> dec;
+    vector<double> time;
+    vector<uint16_t> energy;
+    vector<uint8_t> ph_earth;
+    vector<uint8_t> theta;
+    vector<uint8_t> evstatus;
     
 protected:
-
-	bool binary_search(double time, uint32_t& index, bool lowerbound, uint32_t iminstart = 0, uint32_t imaxstart = 0);
-    void readTimeInterval(uint32_t index_end, double &timestart, double &timend);
+    
+    AGILETelem::EVTPacket* evt;
+    
+    bool checkEvstatus(uint8_t filtercode, uint8_t evstatus);
     
     
 };

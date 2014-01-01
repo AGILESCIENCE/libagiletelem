@@ -16,98 +16,19 @@
 
 
 #include "LOGFilter.h"
-#include "packet/File.h"
+
 
 LOGFilter::LOGFilter(string archivename, uint32_t timeStep) : AGILEFilter(archivename) {
 	this->timeStep = timeStep;
-	
-	string agile;
-    const char* home = getenv("AGILE");
-    if (!home)
-    {
-    	std::cerr << "AGILE environment variable is not defined." << std::endl;
-        exit(0);
-    }
-    agile = home;
-        	
 	/// The Packet containing the FADC value of each triggered telescope
-	log = new AGILETelem::LOGPacket(agile + "/share/agiletelem/agile.stream", archivename, "");
-	PacketLib::File f(log->isBigendian());
-	f.open(archivename.c_str(), "r");
-	filedim = f.fsize();
-	//get first Packet
-	byte* b_log = log->readPacket(0L);
-	tstart = log->getTime();
-	packetdim = log->getInputPacketDimension(b_log);
-	numberofpackets = filedim / packetdim;
-	b_log = log->readPacket(filedim - packetdim);
-	tend = log->getTime();
-	cout << "filedim " << filedim << endl;
-	cout << "packetdim " << packetdim << endl;
-	cout << "numberofpackets " << numberofpackets << endl;
-	cout << "time = " << setprecision(15) << tstart << ", " << tend << endl;
-	f.close();
+	log = new AGILETelem::LOGPacket(basedir + "/share/agiletelem/agile.stream", archivename, "");
+	packet = (AGILEPacket*) log;
+	checkarchive(archivename);
 	reset();
 }
 
 LOGFilter::~LOGFilter() {
 
-}
-
-
-
-void LOGFilter::readTimeInterval(uint32_t index_end, double &timestart, double &timeend) {
-	byte* b_log = log->readPacket(packetdim * index_end);
-	timeend = log->getTime();
-	b_log = log->readPacket(packetdim * (index_end-1));
-	timestart =  log->getTime();
-	return;
-}
-
-
-bool LOGFilter::binary_search(double time, uint32_t &index, bool lowerbound, uint32_t iminstart, uint32_t imaxstart) {
-uint32_t imin = 1;
-	if(iminstart != 0)
-		imin = iminstart;
-	uint32_t imax = numberofpackets-1;
-	if(imaxstart != 0)
-		imax = imaxstart;
-	int count = 0;
-	if(time < 0)
-		return false;
-	while(imax >= imin) {
-		count++;
-		// calculate the midpoint for roughly equal partition
-      	int imid = midpoint(imin, imax);
-      	double timestart;
-      	double timeend;
-      	readTimeInterval(imid, timestart, timeend);
-      	if(timestart < time && timeend >= time) {
-      		//cout << count << endl;
-      		// key found at index imid
-      		if(lowerbound)
-      			index = imid;
-      		else {//upperbound
-      			if(time == timeend)
-      				index = imid;
-      			else
-      				index = imid-1;
-      		}
-      		log->readPacket(packetdim * index);
-      		//string bound = lowerbound?"lowerbound":"upperbound";
-      		//cout << "I"<< bound <<": [" << setprecision(15) <<  timestart << ", " << timeend << "] -> " << log->getTime() << " -> " << index << endl;
-        	return true;
-        }
-        else if (time > timeend)
-        	// change min index to search upper subarray
-        	imin = imid + 1;
-      	else         
-        	// change max index to search lower subarray
-        	imax = imid - 1;
-	}
-	//cout << count << endl;
-	return false;
-	
 }
 
 bool LOGFilter::query(double tstart, double tstop, short phasecode) {
@@ -128,48 +49,9 @@ bool LOGFilter::query(double tstart, double tstop, short phasecode) {
 	for(uint32_t i=index1; i<=index2; i++) {
 		byte* b_log = log->readPacket(packetdim * i);
 		short phase = log->getPhase();
-		/*
-			if ((phasecode & 1) == 1)
-				str << " && PHASE .NE. 0";
-			if ((phasecode & 2) == 2)
-				str << " && PHASE .NE. 1";
-			if ((phasecode & 4) == 4)
-				str << " && PHASE .NE. 2";
-			if ((phasecode & 8) == 8)
-				str << " && PHASE .NE. 3";
-			if ((phasecode & 16) == 16)
-				str << " && PHASE .NE. 4";
-        */
-        bool add = false;
-        int countcond = 0;
-        int countverified = 0;
-        if ((phasecode & 1) == 1) {
-        	countcond++;
-        	if(phase != 0)
-        		countverified++;
-        }
-        if ((phasecode & 2) == 2){
-        	countcond++;
-        	if(phase != 1)
-        		countverified++;
-        }
-        if ((phasecode & 4) == 4){
-        	countcond++;
-        	if(phase != 2)
-        		countverified++;
-        }
-        if ((phasecode & 8) == 8){
-        	countcond++;
-        	if(phase != 3)
-        		countverified++;
-        }
-        if ((phasecode & 16) == 16){
-        	countcond++;
-        	if(phase != 4)
-        		countverified++;
-        }
-        if(countcond > 0 && countcond == countverified)
-        	add = true;
+		
+		bool add = checkPhasecode(phasecode, phase);
+        
 		if(add) {
 			//add data to arrays
 			ra_y.push_back(log->getAttitudeRaY());
@@ -186,7 +68,6 @@ bool LOGFilter::query(double tstart, double tstop, short phasecode) {
 }
     
 void LOGFilter::reset() {
-	int capacity = 2e6;
 	ra_y.reserve(capacity);
 	ra_y.clear();
 	dec_y.reserve(capacity);

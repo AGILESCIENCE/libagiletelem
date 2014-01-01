@@ -71,6 +71,10 @@ public:
 	AGILEPacket(string packetConfig, int packetID=1);
 
 	~AGILEPacket();
+	
+	virtual void setTime(double time) = 0;
+	
+	virtual double getTime() = 0;
 
 	///It returns the total dimension of the packet contained in the stream (without prefix). The stream* contains also the prefix (if present)
 	///\param The stream with the prefix (if present)

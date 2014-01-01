@@ -71,7 +71,7 @@ public:
     bool query(double tstart, double tstop, short phasecode);
     
     ///reset all the vectors of the result
-    void reset();
+    virtual void reset();
     
     //results
     vector<double> ra_y;
@@ -85,18 +85,11 @@ public:
     ///the sample of lines withint the original FITS archive.
     uint32_t timeStep;
     
-    bool binary_search(double time, uint32_t& index, bool lowerbound, uint32_t iminstart = 0, uint32_t imaxstart = 0);
-    void readTimeInterval(uint32_t index_end, double &timestart, double &timend);
-	
     
 protected:
 
 	AGILETelem::LOGPacket* log;
-	double tstart;
-	double tend;
-	dword packetdim;
-	dword numberofpackets;
-	dword filedim;
+	
     
 };
 

@@ -39,9 +39,9 @@ public:
     /// Writing the packet
 	void writePacket();
 
-	void setTime(double time);
+	virtual void setTime(double time);
 	
-	double getTime();
+	virtual double getTime();
 
 	void setRA(float ra);
 	
