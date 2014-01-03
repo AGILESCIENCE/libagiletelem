@@ -75,6 +75,11 @@ public:
     ///\return false if the index of the lower or upper bound is not found, found if the interval is found
     bool query(double tstart, double tstop, uint8_t phasecode, uint8_t filtercode, uint16_t emin, uint16_t emax, uint8_t albrad, uint8_t fovradmin, uint8_t fovradmax);
     
+    ///postfilter1
+    ///With this postfilter it is possible to evaluate if the photon in contained into a circle of radius mdim centered in a (l,b) position
+    void setPostfilter1(double mdim, double lc, double bc);
+    void unsetPostfilter1();
+    
     ///reset all the vectors of the result
     virtual void reset();
     
@@ -91,7 +96,17 @@ protected:
     
     AGILETelem::EVTPacket* evt;
     
+    //postfilter1
+    double mdim;
+    double lc;
+    double bc;
+    double postfilter1;
+    
     bool checkEvstatus(uint8_t filtercode, uint8_t evstatus);
+    
+    bool checkPostfilter1(float ra, float dec);
+    
+    
     
     
 };

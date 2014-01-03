@@ -17,11 +17,15 @@
 
 #include "EVTFilter.h"
 
+#include "MathUtils.h"
+
 EVTFilter::EVTFilter(string archivename) : AGILEFilter(archivename) {
 	// The Packet containing the FADC value of each triggered telescope
 	evt = new AGILETelem::EVTPacket(basedir + "/share/agiletelem/agile.stream", archivename, "");
 	packet = (AGILEPacket*) evt;
 	checkarchive(archivename);
+	postfilter1 = false;
+	mdim = lc = bc = 0;
 	reset();
 }
 
@@ -72,6 +76,8 @@ bool EVTFilter::checkEvstatus(uint8_t filtercode, uint8_t evstatus) {
 
 
 bool EVTFilter::query(double tstart, double tstop, uint8_t phasecode, uint8_t filtercode, uint16_t emin, uint16_t emax, uint8_t albrad, uint8_t fovradmin, uint8_t fovradmax) {
+
+	//cout << (int) phasecode << " " << (int) filtercode << " " << (int) emin << " " << (int) emax << " " << (int) albrad << " " << (int) fovradmin << " " << (int) fovradmax << endl;
 	//binary search index1
 	uint32_t index1;
 	bool ret = binary_search(tstart, index1, true);
@@ -110,11 +116,17 @@ bool EVTFilter::query(double tstart, double tstop, uint8_t phasecode, uint8_t fi
         add = false;
         if(energy >= emin && energy <= emax && ph_earth >= albrad && theta < fovradmax && theta >= fovradmin)
         	add = true;
+        	
+        float ra = evt->getRA();
+        float dec = evt->getDEC();
+        if(add && postfilter1 == true) {
+        	add = checkPostfilter1(ra, dec);
+        }
         
 		if(add) {
 			//add data to arrays
-			this->ra.push_back(evt->getRA());
-			this->dec.push_back(evt->getDEC());
+			this->ra.push_back((float) ra);
+			this->dec.push_back((float) dec);
 			this->time.push_back(evt->getTime());
 			this->energy.push_back((uint16_t) energy);
 			this->ph_earth.push_back((uint8_t) ph_earth);
@@ -126,8 +138,40 @@ bool EVTFilter::query(double tstart, double tstop, uint8_t phasecode, uint8_t fi
 	return true;
 }
     
+void EVTFilter::setPostfilter1(double mdim, double lc, double bc) {
+	postfilter1 = true;
+	this->mdim = mdim;
+	this->lc = lc;
+	this->bc = bc;
+	//cout << "mdim " << this->mdim << " " << this->lc << " " << this->bc << endl;
+}
+
+void EVTFilter::unsetPostfilter1() {
+	postfilter1 = false;
+}
+
+bool EVTFilter::checkPostfilter1(float ra, float dec) {
+	double l = 0, b = 0;
+	Euler((double)ra, (double)dec, &l, &b, 1);
+	if (SphDistDeg(l, b, lc, bc)<=mdim/2.0)
+		return true;
+	else
+		return false;
+}
 
 void EVTFilter::reset() {
 	time.reserve(capacity);
 	time.clear();
+	ra.reserve(capacity);
+	ra.clear();
+	dec.reserve(capacity);
+	dec.clear();
+	energy.reserve(capacity);
+	energy.clear();
+	ph_earth.reserve(capacity);
+	ph_earth.clear();
+	theta.reserve(capacity);
+	theta.clear();
+	evstatus.reserve(capacity);
+	evstatus.clear();
 }
