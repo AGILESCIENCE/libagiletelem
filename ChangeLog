@@ -1,4 +1,8 @@
+
+
+
 2013-12-31 Andrea Bulgarelli <bulgarelli@iasfbo.inaf.it>
+TAG v1.1.0
 + AGILEFilter generalization
 + EVTFilter
 + delete some file moved into gtCommon
