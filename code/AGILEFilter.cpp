@@ -14,7 +14,7 @@
  *                                                                         *
  ***************************************************************************/
  
-#include "AGILEFilter.h""
+#include "AGILEFilter.h"
 #include "packet/File.h"
 
 AGILEFilter::AGILEFilter(string archivename) {
@@ -27,6 +27,9 @@ AGILEFilter::AGILEFilter(string archivename) {
         exit(0);
     }
     basedir = home;
+    prequery_ok = false;
+    isaprequery = false;
+
 }
 
 AGILEFilter::~AGILEFilter() {
@@ -56,10 +59,16 @@ void AGILEFilter::checkarchive(string archivename) {
 }
 
 void AGILEFilter::readTimeInterval(uint32_t index_end, double &timestart, double &timeend) {
-	byte* b_log = packet->readPacket(packetdim * index_end);
-	timeend = packet->getTime();
-	b_log = packet->readPacket(packetdim * (index_end-1));
-	timestart =  packet->getTime();
+	if(prequery_ok) {
+		timeend = pre_time[index_end];
+		timestart = pre_time[index_end-1];
+		//cout << index_end << " - " << timestart << " " << timeend << endl;
+	} else {
+		packet->readPacket(packetdim * index_end);
+		timeend = packet->getTime();
+		packet->readPacket(packetdim * (index_end-1));
+		timestart =  packet->getTime();
+	}
 	return;
 }
 
@@ -67,7 +76,13 @@ bool AGILEFilter::binary_search(double time, uint32_t &index, bool lowerbound, u
 uint32_t imin = 1;
 	if(iminstart != 0)
 		imin = iminstart;
-	uint32_t imax = numberofpackets-1;
+	uint32_t imax;
+	
+	if(prequery_ok) {
+		imax = this->pre_time.size()-1;
+	} else {
+		imax = numberofpackets-1;
+	}
 	if(imaxstart != 0)
 		imax = imaxstart;
 	int count = 0;
@@ -91,8 +106,6 @@ uint32_t imin = 1;
       			else
       				index = imid-1;
       		}
-      		packet->readPacket(packetdim * index);
-      		//string bound = lowerbound?"lowerbound":"upperbound";
       		//cout << "I"<< bound <<": [" << setprecision(15) <<  timestart << ", " << timeend << "] -> " << log->getTime() << " -> " << index << endl;
         	return true;
         }
@@ -140,4 +153,17 @@ bool AGILEFilter::checkPhasecode(uint8_t phasecode, uint8_t phase) {
 	if(countcond > 0 && countcond == countverified)
 		add = true;
 	return add;
+}
+
+void AGILEFilter::reset() {
+	time.reserve(capacity);
+	time.clear();
+}
+
+void AGILEFilter::resetprequery() {
+	prequery_ok = false;
+	pre_time.reserve(capacity);
+	pre_time.clear();
+	
+	cout << "****************AGILEFilter::resetprequery() " << endl;
 }

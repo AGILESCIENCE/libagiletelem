@@ -35,11 +35,18 @@ public:
     
     void checkarchive(string archivename);
 
-	virtual void reset() = 0;
+	virtual void reset();
 	
-	bool binary_search(double time, uint32_t& index, bool lowerbound, uint32_t iminstart = 0, uint32_t imaxstart = 0);
+	virtual void resetprequery();
+	
+	//results
+	vector<double> time;	
   	
 protected:
+
+	
+
+	bool binary_search(double time, uint32_t& index, bool lowerbound, uint32_t iminstart = 0, uint32_t imaxstart = 0);
 
 	uint32_t midpoint(uint32_t imin, uint32_t imax);
 	
@@ -70,6 +77,13 @@ protected:
 	dword filedim;
 	
 	AGILETelem::AGILEPacket* packet;
+	
+	//pre-query
+	vector<double> pre_time;
+	bool prequery_ok;
+	bool isaprequery;
+	double preval_tstart;
+    double preval_tstop;
 };
 
 #endif

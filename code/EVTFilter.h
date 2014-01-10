@@ -71,6 +71,9 @@ public:
 
     ~EVTFilter();
     
+    ///pre-query
+    bool prequery(double tstart, double tstop, uint8_t phasecode, uint8_t filtercode, uint16_t emin, uint16_t emax, uint8_t albrad, uint8_t fovradmin, uint8_t fovradmax);
+    
     ///\param tstart,tstop should be a list of time intervals
     ///\return false if the index of the lower or upper bound is not found, found if the interval is found
     bool query(double tstart, double tstop, uint8_t phasecode, uint8_t filtercode, uint16_t emin, uint16_t emax, uint8_t albrad, uint8_t fovradmin, uint8_t fovradmax);
@@ -83,10 +86,11 @@ public:
     ///reset all the vectors of the result
     virtual void reset();
     
+    void resetprequery();
+    
     //results
     vector<float> ra;
     vector<float> dec;
-    vector<double> time;
     vector<uint16_t> energy;
     vector<uint8_t> ph_earth;
     vector<uint8_t> theta;
@@ -106,7 +110,20 @@ protected:
     
     bool checkPostfilter1(float ra, float dec);
     
+    ///pre-query section
+    uint16_t preval_emin;
+    uint16_t preval_emax;
+    uint8_t preval_fovradmin;
+    uint8_t preval_fovradmax;
+    vector<float> pre_ra;
+    vector<float> pre_dec;
+    vector<uint16_t> pre_energy;
+    vector<uint8_t> pre_ph_earth;
+    vector<uint8_t> pre_theta;
+    vector<uint8_t> pre_evstatus;
+    vector<uint8_t> pre_phase;
     
+    void addEvent(dword index);
     
     
 };

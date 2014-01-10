@@ -70,15 +70,18 @@ public:
     ///\return false if the index of the lower or upper bound is not found, found if the interval is found
     bool query(double tstart, double tstop, short phasecode);
     
+    bool prequery(double tstart, double tstop, short phasecode);
+    
     ///reset all the vectors of the result
     virtual void reset();
+    
+    void resetprequery();
     
     //results
     vector<double> ra_y;
     vector<double> dec_y;
     vector<double> earth_ra;
     vector<double> earth_dec;
-    vector<double> time;
     vector<short> phase;
     vector<double> livetime; //double for compatibility with AG_expmapgenT5
     
@@ -90,6 +93,16 @@ protected:
 
 	AGILETelem::LOGPacket* log;
 	
+	///pre-query section
+    uint16_t preval_phasecode;
+	vector<double> pre_ra_y;
+    vector<double> pre_dec_y;
+    vector<double> pre_earth_ra;
+    vector<double> pre_earth_dec;
+    vector<short> pre_phase;
+    vector<double> pre_livetime;
+	
+    void addEvent(dword index);
     
 };
 
