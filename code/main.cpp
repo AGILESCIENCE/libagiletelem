@@ -119,7 +119,7 @@ int mainR() {
 			/// The Packet containing the FADC value of each triggered telescope
 			AGILETelem::EVTPacket* evt = new AGILETelem::EVTPacket("./conf/agile.stream", "agileevt.raw", "");
 			///Read a telemetry packet from .raw file. Return 0 if end of file
-			byte* b_evt = evt->readPacket();
+			ByteStreamPtr b_evt = evt->readPacket();
 		
 			uint32_t counter = 0;
 			while(b_evt != 0) { //if not end of file
@@ -153,17 +153,17 @@ int mainR() {
 			/// The Packet containing the FADC value of each triggered telescope
 			AGILETelem::LOGPacket* log = new AGILETelem::LOGPacket("./conf/agile.stream", "agilelog.160.raw", "");
 			///Read a telemetry packet from .raw file. Return 0 if end of file
-			byte* b_evt = log->readPacket();
+			ByteStreamPtr b_log = log->readPacket();
 		
 			uint32_t counter = 0;
-			while(b_evt != 0) { //if not end of file
+			while(b_log != 0) { //if not end of file
 				counter++;
 				//print the overall content of the packet
 				//evt->printPacket_input();
 
 				cout << "---------------------------------" << endl;
 				cout << "---- " << counter <<endl;
-				cout << "D: " << log->getInputPacketDimension(b_evt) << endl;
+				cout << "D: " << log->getInputPacketDimension(b_log) << endl;
 			
 				cout << "TIME: " << setprecision(20) << log->getTime() << endl;
 				cout << "PHASE: " <<  (int)log->getPhase() << endl;
@@ -175,7 +175,7 @@ int mainR() {
 				cout << "---- " << counter <<endl;
 				
 				///Read a telemetry packet from .raw file
-				b_evt = log->readPacket();
+				b_log = log->readPacket();
 			
 			
 			}

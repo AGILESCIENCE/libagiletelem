@@ -78,9 +78,9 @@ public:
 
 	///It returns the total dimension of the packet contained in the stream (without prefix). The stream* contains also the prefix (if present)
 	///\param The stream with the prefix (if present)
-	dword getInputPacketDimension(byte* stream);
+	dword getInputPacketDimension(ByteStreamPtr stream);
 
-	int getInputPacketType(byte* stream);
+	int getInputPacketType(ByteStreamPtr stream);
 
 	/// Writing the packet
 	void writePacket();
@@ -91,12 +91,12 @@ public:
 	/// Read a packet from input
 	/// \param pos set the position into the file (if any) before read the packet. -1 = do not set any position (use the last position)
 	/// \return a ByteStreamPtr or 0 if there is no packets
-	byte* readPacket(dword pos=-1);
+	ByteStreamPtr readPacket(dword pos=-1);
 
 	/// Read a packet from input
 	void readPacketPy();
 
-	bool setStream(byte* stream);
+	bool setStream(ByteStreamPtr stream);
 
 	/// Printing the packet in input
 	void printPacket_input();

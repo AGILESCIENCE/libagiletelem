@@ -45,11 +45,11 @@ void AGILEFilter::checkarchive(string archivename) {
 	f.open(archivename.c_str(), "r");
 	filedim = f.fsize();
 	//get first Packet
-	byte* b_log = packet->readPacket(0L);
+	ByteStreamPtr b_log = packet->readPacket(0L);
 	tstart = packet->getTime();
 	packetdim = packet->getInputPacketDimension(b_log);
 	numberofpackets = filedim / packetdim;
-	b_log = packet->readPacket(filedim - packetdim);
+	packet->readPacket(filedim - packetdim);
 	tend = packet->getTime();
 	cout << "filedim " << filedim << endl;
 	cout << "packetdim " << packetdim << endl;

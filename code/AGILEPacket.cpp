@@ -154,7 +154,7 @@ void AGILETelem::AGILEPacket::writePacket() {
 	ops->writePacket(outputPacket);
 }
 
-byte* AGILETelem::AGILEPacket::readPacket(dword pos) {
+ByteStreamPtr AGILETelem::AGILEPacket::readPacket(dword pos) {
 	//set the position
 	if(pos != -1) {
 		InputFile* ipf = (InputFile*) in;
@@ -166,7 +166,7 @@ byte* AGILETelem::AGILEPacket::readPacket(dword pos) {
 		return 0;
 	if (inputPacket->getPacketID() != packetID)
 		return 0;
-	return inputPacket->getInputStream()->stream;
+	return inputPacket->getInputStream();
 }
 
 void AGILETelem::AGILEPacket::readPacketPy() {
@@ -199,7 +199,7 @@ void AGILETelem::AGILEPacket::printPacket_input() {
 	return inputPacket->packet;
 }*/
 
-dword AGILETelem::AGILEPacket::getInputPacketDimension(byte* stream) {
+dword AGILETelem::AGILEPacket::getInputPacketDimension(ByteStreamPtr stream) {
 	//cout << "C: " << inputPacket->getDimension() << endl;
     //inputPacket->verifyPacketValue(stream);
     //return inputPacket->getDimension();
@@ -207,12 +207,12 @@ dword AGILETelem::AGILEPacket::getInputPacketDimension(byte* stream) {
 	return ips->getPacketDimension(stream);
 }
 
-int AGILETelem::AGILEPacket::getInputPacketType(byte* stream) {
+int AGILETelem::AGILEPacket::getInputPacketType(ByteStreamPtr stream) {
 
 	return ips->detPacketType(stream);
 }
 
-bool AGILETelem::AGILEPacket::setStream(byte* stream) {
+bool AGILETelem::AGILEPacket::setStream(ByteStreamPtr stream) {
 	//cout << inputPacket << endl;
-	inputPacket->setPacketValue(stream);
+	inputPacket->setPacketValue(stream->stream);
 }
