@@ -165,5 +165,5 @@ void AGILEFilter::resetprequery() {
 	pre_time.reserve(capacity);
 	pre_time.clear();
 	
-	cout << "****************AGILEFilter::resetprequery() " << endl;
+	//cout << "****************AGILEFilter::resetprequery() " << endl;
 }

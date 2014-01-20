@@ -78,7 +78,7 @@ protected:
 	
 	AGILETelem::AGILEPacket* packet;
 	
-	//pre-query
+	//pre-query section
 	vector<double> pre_time;
 	bool prequery_ok;
 	bool isaprequery;
