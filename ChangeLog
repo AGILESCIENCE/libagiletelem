@@ -1,3 +1,7 @@
+2014-01-28 Andrea Bulgarelli <bulgarelli@iasfbo.inaf.it>
+TAG v1.3.0
++ RAT packet
+
 2014-01-14 Andrea Bulgarelli <bulgarelli@iasfbo.inaf.it>
 TAG v1.2.0
 + changes for new packetlib 3.1.1
