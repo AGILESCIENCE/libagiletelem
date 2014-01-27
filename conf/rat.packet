@@ -1,0 +1,119 @@
+-- name of packet
+AGILE ratemters
+[PacketHeader]
+-- file that contains the description of the header
+agile.header
+[DataFieldHeader]
+-- field 0 - time
+time 1
+16
+none
+-- field 1 - time
+time 2
+16
+none
+-- field 2 - time
+time 3
+16
+none
+-- field 3 - time
+time 4
+16
+none
+[SourceDataField]
+-- type of packet: noblock, block, rblock (with recoursive block)
+rblock
+[RBlock Configuration]
+-- fixed part present (yes | no)
+yes
+-- variable part present (yes | no). If yes, add [RBlockX] sections.
+no
+--number of rblock (if variable part is present)
+0
+[Fixed Part]
+-- field 0 - SOURCE DATA HEADER ----------------------------------------
+RAT_M6271_0_AC_TOP1_RATEM 
+16
+none
+-- field 1 
+RAT_M6272_0_AC_TOP2_RATEM
+16
+none
+-- field 2
+RAT_M6273_0_AC_TOP3_RATEM
+16
+none
+-- field 3
+RAT_M6274_0_AC_LAT1_1_RATEM
+16
+none
+-- field 4
+RAT_M6275_0_AC_LAT1_2_RATEM
+16
+none
+-- field 5
+RAT_M6276_0_AC_LAT1_3_RATEM
+16 
+none
+-- field 6
+RAT_M6277_0_AC_LAT2_1_RATEM
+16
+none
+-- field 7
+RAT_M6278_0_AC_LAT2_2_RATEM
+16
+none
+-- field 8
+RAT_M6279_0_AC_LAT2_3_RATEM
+16
+none
+-- field 9
+RAT_M6280_0_AC_LAT3_1_RATEM
+16
+none
+-- field 10
+RAT_M6281_0_AC_LAT3_2_RATEM
+16
+none
+-- field 11
+RAT_M6282_0_AC_LAT3_3_RATEM
+16
+none
+-- field 12
+RAT_M6283_0_AC_LAT4_1_RATEM
+16
+none
+-- field 13
+RAT_M6284_0_AC_LAT4_2_RATEM
+16
+none
+-- field 14
+RAT_M6285_0_AC_LAT4_3_RATEM
+16 
+none
+-- field 15
+RAT_M6305_0_PDHU_ratemeter_of_T1_YES_signal
+16
+none
+-- field 16
+RAT_M6320_0_PDHU_GRID_events_sent_to_ground
+16
+none
+-- field 17
+RAT_M6573_0_MCAL_Fixed_Rt_BoardX
+16
+none
+-- field 18
+RAT_M6575_0_MCAL_Fixed_Rt_BoardZ
+16
+none
+[Identifiers]
+-- ID0 type
+-- field number
+2
+-- type (0 header, 1 data field)
+0
+-- value
+3
+
+
