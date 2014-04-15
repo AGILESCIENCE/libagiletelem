@@ -82,6 +82,8 @@ public:
     vector<double> dec_y;
     vector<double> earth_ra;
     vector<double> earth_dec;
+	vector<double> earth_theta;
+    vector<double> earth_phi;
     vector<short> phase;
     vector<double> livetime; //double for compatibility with AG_expmapgenT5
     
@@ -99,6 +101,8 @@ protected:
     vector<double> pre_dec_y;
     vector<double> pre_earth_ra;
     vector<double> pre_earth_dec;
+	vector<double> pre_earth_theta;
+    vector<double> pre_earth_phi;
     vector<short> pre_phase;
     vector<double> pre_livetime;
 	

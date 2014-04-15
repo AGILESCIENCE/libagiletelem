@@ -154,7 +154,7 @@ void AGILETelem::AGILEPacket::writePacket() {
 	ops->writePacket(outputPacket);
 }
 
-ByteStreamPtr AGILETelem::AGILEPacket::readPacket(dword pos) {
+ByteStreamPtr AGILETelem::AGILEPacket::readPacket(long pos) {
 	//set the position
 	if(pos != -1) {
 		InputFile* ipf = (InputFile*) in;

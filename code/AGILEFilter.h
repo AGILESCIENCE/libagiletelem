@@ -40,17 +40,21 @@ public:
 	virtual void resetprequery();
 	
 	//results
-	vector<double> time;	
-  	
-protected:
-
+	vector<double> time;
 	
-
 	bool binary_search(double time, uint32_t& index, bool lowerbound, uint32_t iminstart = 0, uint32_t imaxstart = 0);
 
 	uint32_t midpoint(uint32_t imin, uint32_t imax);
 	
     void readTimeInterval(uint32_t index_end, double &timestart, double &timend);
+	
+protected:
+
+	
+
+	
+
+
     
     ///check if phasecode is contained into phase
 	///		if ((phasecode & 1) == 1)
@@ -72,9 +76,9 @@ protected:
 	
 	double tstart;
 	double tend;
-	dword packetdim;
-	dword numberofpackets;
-	dword filedim;
+	uint64_t packetdim;
+	uint32_t numberofpackets;
+	long filedim;
 	
 	AGILETelem::AGILEPacket* packet;
 	

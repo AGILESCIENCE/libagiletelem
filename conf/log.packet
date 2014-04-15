@@ -103,6 +103,38 @@ none
 EARTH_DEC 4
 16
 none
+-- field 16 - EARTH_THETA 1
+EARTH_THETA 1
+16
+none
+-- field 17 - EARTH_THETA 2
+EARTH_THETA 2
+16
+none
+-- field 18 - EARTH_THETA 3
+EARTH_THETA 3
+16
+none
+-- field 19 - EARTH_THETA 4
+EARTH_THETA 4
+16
+none
+-- field 20 - EARTH_PHI 1
+EARTH_PHI 1
+16
+none
+-- field 21 - EARTH_PHI 2
+EARTH_PHI 2
+16
+none
+-- field 22 - EARTH_PHI 3
+EARTH_PHI 3
+16
+none
+-- field 23 - EARTH_PHI 4
+EARTH_PHI 4
+16
+none
 [Identifiers]
 -- ID0 type
 -- field number

@@ -162,7 +162,7 @@ bool EVTFilter::query(double tstart, double tstop, uint8_t phasecode, uint8_t fi
 	if(ret == false) {
 		if(prequery_ok && tstart >= preval_tstart && tstart <= preval_tstop)
 			return true;
-		cerr << "EVTFilter::query index1 not found" << endl;
+		cout << "EVTFilter::query index1 not found" << endl;
 		return false;
 	}
 	//binary search index2
@@ -171,7 +171,7 @@ bool EVTFilter::query(double tstart, double tstop, uint8_t phasecode, uint8_t fi
 	if(ret == false) {
 		if(prequery_ok && tstop >= preval_tstart && tstop <= preval_tstop)
 			return true;
-		cerr << "EVTFilter::query index2 not found" << endl;
+		cout << "EVTFilter::query index2 not found" << endl;
 		return false;
 	}
 	//cout << "INDEX " << index1 << " " << index2 << endl;

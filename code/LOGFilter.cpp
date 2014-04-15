@@ -38,6 +38,8 @@ void LOGFilter::addEvent(dword index) {
 	double attdec;
 	double earth_ra;
 	double earth_dec;
+	double earth_theta;
+	double earth_phi;
 	double time;
 	float livetime;
 
@@ -47,6 +49,8 @@ void LOGFilter::addEvent(dword index) {
 	attdec = log->getAttitudeDecY();
 	earth_ra = log->getEarthRa();
 	earth_dec = log->getEarthDec();
+	earth_theta = log->getEarthTheta();
+	earth_phi = log->getEarthPhi();
 	time = log->getTime();
 	livetime = log->getLivetime();
 			
@@ -54,6 +58,8 @@ void LOGFilter::addEvent(dword index) {
 	this->pre_dec_y.push_back(attdec);
 	this->pre_earth_ra.push_back(earth_ra);
 	this->pre_earth_dec.push_back(earth_dec);
+	this->pre_earth_theta.push_back(earth_theta);
+	this->pre_earth_phi.push_back(earth_phi);
 	this->pre_time.push_back(time);
 	this->pre_livetime.push_back(livetime);
 	this->pre_phase.push_back((short)phase);
@@ -99,7 +105,7 @@ bool LOGFilter::query(double tstart, double tstop, short phasecode) {
 	if(ret == false) {
 		if(prequery_ok && tstart >= preval_tstart && tstart <= preval_tstop)
 			return true;
-		cerr << "LOGFilter::query index1 not found" << endl;
+		cout << "LOGFilter::query index1 not found in " << setprecision(15) << tstart << " " << tstop << endl;
 		return false;
 	}
 	//binary search index2
@@ -108,7 +114,7 @@ bool LOGFilter::query(double tstart, double tstop, short phasecode) {
 	if(ret == false) {
 		if(prequery_ok && tstop >= preval_tstart && tstop <= preval_tstop)
 			return true;
-		cerr << "LOGFilter::query index2 not found" << endl;
+		cout << "LOGFilter::query index2 not found in " << setprecision(15) << tstart << " " << tstop << endl;
 		return false;
 	}
 	for(uint32_t i=index1; i<=index2; i++) {
@@ -117,6 +123,8 @@ bool LOGFilter::query(double tstart, double tstop, short phasecode) {
 		double attdec;
 		double earth_ra;
 		double earth_dec;
+		double earth_theta;
+		double earth_phi;
 		double time;
 		float livetime;
 		bool add;
@@ -128,6 +136,8 @@ bool LOGFilter::query(double tstart, double tstop, short phasecode) {
 			attdec = log->getAttitudeDecY();
 			earth_ra = log->getEarthRa();
 			earth_dec = log->getEarthDec();
+			earth_theta = log->getEarthTheta();
+			earth_phi = log->getEarthPhi();
 			time = log->getTime();
 			livetime = log->getLivetime();
 		} else {
@@ -136,6 +146,8 @@ bool LOGFilter::query(double tstart, double tstop, short phasecode) {
 			attdec = pre_dec_y[i];
 			earth_ra = pre_earth_ra[i];
 			earth_dec = pre_earth_dec[i];
+			earth_theta = pre_earth_theta[i];
+			earth_phi = pre_earth_phi[i];
 			time = pre_time[i];
 			livetime = pre_livetime[i];
 		}
@@ -149,6 +161,8 @@ bool LOGFilter::query(double tstart, double tstop, short phasecode) {
 				this->pre_dec_y.push_back(attdec);
 				this->pre_earth_ra.push_back(earth_ra);
 				this->pre_earth_dec.push_back(earth_dec);
+				this->pre_earth_theta.push_back(earth_theta);
+				this->pre_earth_phi.push_back(earth_phi);
 				this->pre_time.push_back(time);
 				this->pre_livetime.push_back(livetime);
 				this->pre_phase.push_back((short)phase);
@@ -158,6 +172,8 @@ bool LOGFilter::query(double tstart, double tstop, short phasecode) {
 				this->dec_y.push_back(attdec);
 				this->earth_ra.push_back(earth_ra);
 				this->earth_dec.push_back(earth_dec);
+				this->earth_theta.push_back(earth_theta);
+				this->earth_phi.push_back(earth_phi);
 				this->time.push_back(time);
 				this->livetime.push_back(livetime);
 				this->phase.push_back((short)phase);
@@ -178,6 +194,10 @@ void LOGFilter::reset() {
 	earth_ra.clear();
 	earth_dec.reserve(capacity);
 	earth_dec.clear();
+	earth_theta.reserve(capacity);
+	earth_theta.clear();
+	earth_phi.reserve(capacity);
+	earth_phi.clear();
 	phase.reserve(capacity);
 	phase.clear();
 	livetime.reserve(capacity);
@@ -196,6 +216,10 @@ void LOGFilter::resetprequery() {
 	pre_earth_ra.clear();
 	pre_earth_dec.reserve(capacity);
 	pre_earth_dec.clear();
+	pre_earth_theta.reserve(capacity);
+	pre_earth_theta.clear();
+	pre_earth_phi.reserve(capacity);
+	pre_earth_phi.clear();
 	pre_phase.reserve(capacity);
 	pre_phase.clear();
 	pre_livetime.reserve(capacity);

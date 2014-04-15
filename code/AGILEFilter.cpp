@@ -73,9 +73,10 @@ void AGILEFilter::readTimeInterval(uint32_t index_end, double &timestart, double
 }
 
 bool AGILEFilter::binary_search(double time, uint32_t &index, bool lowerbound, uint32_t iminstart, uint32_t imaxstart) {
-uint32_t imin = 1;
+	uint32_t imin = 1;
 	if(iminstart != 0)
 		imin = iminstart;
+	
 	uint32_t imax;
 	
 	if(prequery_ok) {
@@ -85,13 +86,13 @@ uint32_t imin = 1;
 	}
 	if(imaxstart != 0)
 		imax = imaxstart;
-	int count = 0;
+	long count = 0;
 	if(time < 0)
 		return false;
 	while(imax >= imin) {
 		count++;
 		// calculate the midpoint for roughly equal partition
-      	int imid = midpoint(imin, imax);
+      	uint32_t imid = midpoint(imin, imax);
       	double timestart;
       	double timeend;
       	readTimeInterval(imid, timestart, timeend);

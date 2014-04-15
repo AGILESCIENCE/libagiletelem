@@ -68,6 +68,14 @@ public:
 	void setEarthDec(double value)  { sdf_out->setFieldValue_5_2(12, value); };
 	
 	double getEarthDec() { return sdf_in->getFieldValue_5_2(12); };
+	
+	void setEarthTheta(double value)  { sdf_out->setFieldValue_5_2(16, value); };
+	
+	double getEarthTheta() { return sdf_in->getFieldValue_5_2(16); };
+	
+	void setEarthPhi(double value)  { sdf_out->setFieldValue_5_2(20, value); };
+	
+	double getEarthPhi() { return sdf_in->getFieldValue_5_2(20); };
 };
 }
 

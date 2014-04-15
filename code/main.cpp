@@ -24,13 +24,13 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include "InputFileFITS.h"
+#include "qlbase/InputFileFITS.h"
 #include "EVTPacket.h"
 #include "LOGPacket.h"
 #include "LOGFilter.h"
 #include <locale>
 #include <sstream>
-#include "mac_clock_gettime.h"
+#include "qlbase/mac_clock_gettime.h"
 
 //file types
 #define EVT 1
@@ -61,6 +61,8 @@
 #define LOG_Q2 10
 #define LOG_Q3 11
 #define LOG_Q4 12
+#define LOG_EARTH_THETA 26
+#define LOG_EARTH_PHI 27
 
 using namespace std;
 using namespace qlbase;
@@ -325,6 +327,8 @@ int mainW(string filename, int nrows_end) {
 				std::vector<double> attitude_dec_y = inputFF->read64f(LOG_ATTITUDE_DEC_Y, nrows_start, nrows_end-1);
 				std::vector<double> log_earth_ra = inputFF->read64f(LOG_EARTH_RA, nrows_start, nrows_end-1);
 				std::vector<double> log_earth_dec = inputFF->read64f(LOG_EARTH_DEC, nrows_start, nrows_end-1);
+				std::vector<double> log_earth_theta = inputFF->read64f(LOG_EARTH_THETA, nrows_start, nrows_end-1);
+				std::vector<double> log_earth_phi = inputFF->read64f(LOG_EARTH_PHI, nrows_start, nrows_end-1);
 				//std::vector<float> q1 = inputFF->read32f(LOG_Q1, nrows_start, nrows_end-1);
 				//std::vector<float> q2 = inputFF->read32f(LOG_Q2, nrows_start, nrows_end-1);
 				//std::vector<float> q3 = inputFF->read32f(LOG_Q3, nrows_start, nrows_end-1);
@@ -356,6 +360,8 @@ int mainW(string filename, int nrows_end) {
 						log->setAttitudeDecY(attitude_dec_y[i]);
 						log->setEarthRa(log_earth_ra[i]);
 						log->setEarthDec(log_earth_dec[i]);
+						log->setEarthTheta(log_earth_theta[i]);
+						log->setEarthPhi(log_earth_phi[i]);
 					
 						log->writePacket();
 						saved++;
