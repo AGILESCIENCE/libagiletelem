@@ -23,7 +23,7 @@ SHELL = /bin/sh
 
 SYSTEM= $(shell gcc -dumpmachine)
 #ice, ctarta, mpi, cfitsio, sqllite
-LINKERENV= cfitsio, agile
+LINKERENV= cfitsio agile root
 PROJECT= libagiletelem
 EXE_NAME = 
 LIB_NAME = libagiletelem
@@ -74,6 +74,10 @@ endif
 #Set INCPATH to add the inclusion paths
 INCPATH = -I $(INCLUDE_DIR) 
 LIBS = -lstdc++
+ifneq (, $(findstring root, $(LINKERENV)))
+    CXXFLAGS += -W -fPIC -D_REENTRANT $(shell root-config --cflags)
+    LIBS += $(shell root-config --glibs) -lMinuit
+endif
 ifneq (, $(findstring ice, $(LINKERENV)))
         INCPATH += -I$(ICEDIR)/include
 endif
@@ -94,11 +98,11 @@ ifneq (, $(findstring agile, $(LINKERENV)))
 	LIBS += -L$(AGILE)/lib -lpacket
 endif
 #Insert the optional parameter to the compiler. The CFLAGS could be changed externally by the user
-CFLAGS   = -g 
+CFLAGS   = -g -std=c++11 
 #Insert the implicit parameter to the compiler:
 ALL_CFLAGS = -m64 -fexceptions -Wall $(CFLAGS) $(INCPATH)
 #Use CPPFLAGS for the preprocessor
-CPPFLAGS = 
+CPPFLAGS =  
 #Set LIBS for addition library
 
 ifneq (, $(findstring linux, $(SYSTEM)))
@@ -169,10 +173,10 @@ $(shell  cut $(INCLUDE_DIR)/$(VER_FILE_NAME) -f 3 > version)
 ####### 9) Pattern rules
 
 %.o : %.cpp
-	$(CC) $(CPPFLAGS) $(ALL_CFLAGS) -c $< -o $(OBJECTS_DIR)/$@
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(ALL_CFLAGS) -c $< -o $(OBJECTS_DIR)/$@
 
 %.o : %.c
-	$(CC) $(CPPFLAGS) $(ALL_CFLAGS) -c $< -o $(OBJECTS_DIR)/$@
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(ALL_CFLAGS) -c $< -o $(OBJECTS_DIR)/$@
 
 #only for documentation generation
 $(DOXY_SOURCE_DIR)/%.h : %.h
