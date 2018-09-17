@@ -96,7 +96,7 @@ bool AGILEFilter::binary_search(double time, uint32_t &index, bool lowerbound, u
       	double timestart;
       	double timeend;
       	readTimeInterval(imid, timestart, timeend);
-      	if(timestart < time && timeend >= time) {
+      	if(timestart <= time && timeend >= time) {
       		//cout << count << endl;
       		// key found at index imid
       		if(lowerbound)
