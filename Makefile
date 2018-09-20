@@ -103,7 +103,7 @@ CFLAGS   = -g
 #Insert the implicit parameter to the compiler:
 ALL_CFLAGS = -m64 -fexceptions -Wall $(CFLAGS) $(INCPATH)
 #Use CPPFLAGS for the preprocessor
-CPPFLAGS =  
+CPPFLAGS = -std=c++0x 
 #Set LIBS for addition library
 
 ifneq (, $(findstring linux, $(SYSTEM)))
