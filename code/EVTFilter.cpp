@@ -17,7 +17,50 @@
 
 #include "EVTFilter.h"
 
-#include "MathUtils.h"
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+const double PI_BY_TWO = M_PI/2;
+const double TWO_PI = M_PI*2;
+const double FOUR_PI = M_PI*4;
+
+const double RAD2DEG = 180.0/M_PI;
+const double DEG2RAD = M_PI/180.0;
+
+
+/// distance in Galactic coordinates. Longitude=l, latitude=b
+inline double SphDistDeg(double long1, double lat1, double long2, double lat2)
+{
+    double l1 = long1*DEG2RAD;
+    double l2 = long2*DEG2RAD;
+    double b1 = lat1*DEG2RAD;
+    double b2 = lat2*DEG2RAD;
+    double val = sin(b1)*sin(b2) + cos(b1)*cos(b2) *cos(l1-l2);
+    if(val > 1.0) return 0.0;
+    if(val < -1.0) return 180.0;
+    double dist = acos(val);
+    return dist*RAD2DEG;
+}
+
+const double psi[6]    = { 0.57477043300, 4.9368292465,  0.00000000000, 0.00000000000, 0.11142137093, 4.71279419371};
+const double stheta[6] = { 0.88998808748,-0.88998808748, 0.39777715593,-0.39777715593, 0.86766622025,-0.86766622025};
+const double ctheta[6] = { 0.45598377618, 0.45598377618, 0.91748206207, 0.91748206207, 0.49714719172, 0.49714719172};
+const double phi[6]    = { 4.9368292465,  0.57477043300, 0.0000000000,  0.00000000000, 4.71279419371, 0.11142137093};
+
+void Euler(double ai, double bi, double * ao, double * bo, int select)
+{
+--select;
+double a  = ai*DEG2RAD - phi[select];
+double b = bi*DEG2RAD;
+double sb = sin(b);
+double cb = cos(b);
+double cbsa = cb * sin(a);
+b   = -stheta[select] * cbsa + ctheta[select] * sb;
+*bo = b<1.0 ? asin(b)*RAD2DEG : 90.0;
+a   = atan2( ctheta[select] * cbsa + stheta[select] * sb, cb * cos(a) );
+*ao = fmod(a+psi[select]+FOUR_PI, TWO_PI) * RAD2DEG;
+}
 
 EVTFilter::EVTFilter(string archivename) : AGILEFilter(archivename) {
 	// The Packet containing the FADC value of each triggered telescope
@@ -69,7 +112,7 @@ bool EVTFilter::checkEvstatus(uint8_t filtercode, uint8_t evstatus) {
 		if(evstatus != 2)
 			countverified++;
 	}
-	
+
 	if(countcond > 0 && countcond == countverified)
 		add = true;
 	return add;
@@ -83,7 +126,7 @@ void EVTFilter::addEvent(dword index) {
 	uint8_t theta;
 	float ra;
 	float dec;
-	double time; 
+	double time;
 	evt->readPacket(index * packetdim);
 	phase = evt->getPhase();
 	evstatus = evt->getEvstatus();
@@ -126,10 +169,10 @@ bool EVTFilter::prequery(double tstart, double tstop, uint8_t phasecode, uint8_t
 }
 
 bool EVTFilter::query(double tstart, double tstop, uint8_t phasecode, uint8_t filtercode, uint16_t emin, uint16_t emax, uint8_t albrad, uint8_t fovradmin, uint8_t fovradmax) {
-	
+
 	reset();
-	
-	
+
+
 	if(!isaprequery && prequery_ok) {
 		//check if prequery is valid
 		if(tstart < preval_tstart)
@@ -149,12 +192,12 @@ bool EVTFilter::query(double tstart, double tstop, uint8_t phasecode, uint8_t fi
 		else
 		if(fovradmax > preval_fovradmax)
 			prequery_ok = false;
-			
+
 		if(prequery_ok == false)
 			resetprequery();
 	}
-	
-		
+
+
 	//cout << (int) phasecode << " " << (int) filtercode << " " << (int) emin << " " << (int) emax << " " << (int) albrad << " " << (int) fovradmin << " " << (int) fovradmax << endl;
 	//binary search index1
 	uint32_t index1;
@@ -185,9 +228,9 @@ bool EVTFilter::query(double tstart, double tstop, uint8_t phasecode, uint8_t fi
 		float dec;
 		double time;
 		bool add;
-		
+
 		if(!prequery_ok) {
-		
+
 			evt->readPacket(packetdim * i);
 			phase = evt->getPhase();
 			//filter
@@ -211,18 +254,18 @@ bool EVTFilter::query(double tstart, double tstop, uint8_t phasecode, uint8_t fi
 			add = false;
 			if(energy >= emin && energy <= emax && ph_earth >= albrad && theta < fovradmax && theta >= fovradmin)
 				add = true;
-			
+
 			ra = evt->getRA();
 			dec = evt->getDEC();
-		
+
 			if(add && postfilter1 == true) {
 				add = checkPostfilter1(ra, dec);
 			}
-		
+
 			time = evt->getTime();
-			
+
 		} else {
-			
+
 			phase = pre_phase[i];
 			add = checkPhasecode(phasecode, phase);
 			if(add == false)
@@ -244,20 +287,20 @@ bool EVTFilter::query(double tstart, double tstop, uint8_t phasecode, uint8_t fi
 			add = false;
 			if(energy >= emin && energy <= emax && ph_earth >= albrad && theta < fovradmax && theta >= fovradmin)
 				add = true;
-			
+
 			ra = pre_ra[i];
 			dec = pre_dec[i];
-		
+
 			if(add && postfilter1 == true) {
 				add = checkPostfilter1(ra, dec);
 			}
-		
+
 			time = pre_time[i];
-			
+
 		}
-        
+
 		if(add) {
-			
+
 			if(isaprequery) {
 				//add data to arrays
 				this->pre_ra.push_back((float) ra);
@@ -277,14 +320,14 @@ bool EVTFilter::query(double tstart, double tstop, uint8_t phasecode, uint8_t fi
 				this->ph_earth.push_back((uint8_t) ph_earth);
 				this->theta.push_back((uint8_t) theta);
 				this->evstatus.push_back((uint8_t) evstatus);
-			}	
-			
+			}
+
 		}
-		
+
 	}
 	return true;
 }
-    
+
 void EVTFilter::setPostfilter1(double mdim, double lc, double bc) {
 	postfilter1 = true;
 	this->mdim = mdim;
@@ -308,7 +351,7 @@ bool EVTFilter::checkPostfilter1(float ra, float dec) {
 
 void EVTFilter::reset() {
 	AGILEFilter::reset();
-	
+
 	ra.reserve(capacity);
 	ra.clear();
 	dec.reserve(capacity);
@@ -325,7 +368,7 @@ void EVTFilter::reset() {
 
 void EVTFilter::resetprequery() {
 	AGILEFilter::resetprequery();
-	
+
 	//cout << "****************EVTFilter::resetprequery() " << endl;
 	pre_ra.reserve(capacity);
 	pre_ra.clear();

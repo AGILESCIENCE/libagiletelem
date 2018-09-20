@@ -55,13 +55,13 @@ class LOGFilter : public AGILEFilter {
 
 
 public:
-    
+
     ///\param filename the filename of the archive
     ///\param timeStep the sample of lines withint the original FITS archive. Now is pre-filtered
-	LOGFilter(string archivename, uint32_t timeStep);
+	  LOGFilter(string archivename, uint32_t timeStep);
 
     ~LOGFilter();
-    
+
     ///Example:
     ///TIME >= 162907200.000000 && TIME <= 165585600.000000 && LIVETIME > 0 && LOG_STATUS == 0 && MODE == 2 && PHASE .NE. 1 && ((#ROW == 1) || (#ROW == (#ROW/160) *160))
     ///but pre-filtered are
@@ -69,32 +69,32 @@ public:
     ///\param tstart,tstop should be a list of time intervals
     ///\return false if the index of the lower or upper bound is not found, found if the interval is found
     bool query(double tstart, double tstop, short phasecode);
-    
+
     bool prequery(double tstart, double tstop, short phasecode);
-    
+
     ///reset all the vectors of the result
     virtual void reset();
-    
+
     void resetprequery();
-    
+
     //results
     vector<double> ra_y;
     vector<double> dec_y;
     vector<double> earth_ra;
     vector<double> earth_dec;
-	vector<double> earth_theta;
+	  vector<double> earth_theta;
     vector<double> earth_phi;
     vector<short> phase;
     vector<double> livetime; //double for compatibility with AG_expmapgenT5
-    
+
     ///the sample of lines withint the original FITS archive.
     uint32_t timeStep;
-    
-    
+
+
 protected:
 
 	AGILETelem::LOGPacket* log;
-	
+
 	///pre-query section
     uint16_t preval_phasecode;
 	vector<double> pre_ra_y;
@@ -105,9 +105,9 @@ protected:
     vector<double> pre_earth_phi;
     vector<short> pre_phase;
     vector<double> pre_livetime;
-	
+
     void addEvent(dword index);
-    
+
 };
 
 
