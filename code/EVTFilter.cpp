@@ -32,7 +32,7 @@ const double DEG2RAD = M_PI/180.0;
 
 
 /// distance in Galactic coordinates. Longitude=l, latitude=b
-inline double SphDistDeg(double long1, double lat1, double long2, double lat2)
+inline double SphDistDeg2(double long1, double lat1, double long2, double lat2)
 {
     double l1 = long1*DEG2RAD;
     double l2 = long2*DEG2RAD;
@@ -45,23 +45,23 @@ inline double SphDistDeg(double long1, double lat1, double long2, double lat2)
     return dist*RAD2DEG;
 }
 
-const double psi[6]    = { 0.57477043300, 4.9368292465,  0.00000000000, 0.00000000000, 0.11142137093, 4.71279419371};
-const double stheta[6] = { 0.88998808748,-0.88998808748, 0.39777715593,-0.39777715593, 0.86766622025,-0.86766622025};
-const double ctheta[6] = { 0.45598377618, 0.45598377618, 0.91748206207, 0.91748206207, 0.49714719172, 0.49714719172};
-const double phi[6]    = { 4.9368292465,  0.57477043300, 0.0000000000,  0.00000000000, 4.71279419371, 0.11142137093};
+const double psi2[6]    = { 0.57477043300, 4.9368292465,  0.00000000000, 0.00000000000, 0.11142137093, 4.71279419371};
+const double stheta2[6] = { 0.88998808748,-0.88998808748, 0.39777715593,-0.39777715593, 0.86766622025,-0.86766622025};
+const double ctheta2[6] = { 0.45598377618, 0.45598377618, 0.91748206207, 0.91748206207, 0.49714719172, 0.49714719172};
+const double phi2[6]    = { 4.9368292465,  0.57477043300, 0.0000000000,  0.00000000000, 4.71279419371, 0.11142137093};
 
-void Euler(double ai, double bi, double * ao, double * bo, int select)
+void Euler2(double ai, double bi, double * ao, double * bo, int select)
 {
 --select;
-double a  = ai*DEG2RAD - phi[select];
+double a  = ai*DEG2RAD - phi2[select];
 double b = bi*DEG2RAD;
 double sb = sin(b);
 double cb = cos(b);
 double cbsa = cb * sin(a);
-b   = -stheta[select] * cbsa + ctheta[select] * sb;
+b   = -stheta2[select] * cbsa + ctheta2[select] * sb;
 *bo = b<1.0 ? asin(b)*RAD2DEG : 90.0;
-a   = atan2( ctheta[select] * cbsa + stheta[select] * sb, cb * cos(a) );
-*ao = fmod(a+psi[select]+FOUR_PI, TWO_PI) * RAD2DEG;
+a   = atan2( ctheta2[select] * cbsa + stheta2[select] * sb, cb * cos(a) );
+*ao = fmod(a+psi2[select]+FOUR_PI, TWO_PI) * RAD2DEG;
 }
 
 EVTFilter::EVTFilter(string archivename) : AGILEFilter(archivename) {
@@ -344,8 +344,8 @@ void EVTFilter::unsetPostfilter1() {
 
 bool EVTFilter::checkPostfilter1(float ra, float dec) {
 	double l = 0, b = 0;
-	Euler((double)ra, (double)dec, &l, &b, 1);
-	if (SphDistDeg(l, b, lc, bc)<=mdim/2.0)
+	Euler2((double)ra, (double)dec, &l, &b, 1);
+	if (SphDistDeg2(l, b, lc, bc)<=mdim/2.0)
 		return true;
 	else
 		return false;
