@@ -98,7 +98,8 @@ ifneq (, $(findstring agile, $(LINKERENV)))
 	LIBS += -L$(AGILE)/lib -lpacket
 endif
 #Insert the optional parameter to the compiler. The CFLAGS could be changed externally by the user
-CFLAGS   = -g -std=c++11 
+CFLAGS   = -g 
+#-std=c++11 
 #Insert the implicit parameter to the compiler:
 ALL_CFLAGS = -m64 -fexceptions -Wall $(CFLAGS) $(INCPATH)
 #Use CPPFLAGS for the preprocessor
